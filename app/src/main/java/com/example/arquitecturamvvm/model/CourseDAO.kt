@@ -4,7 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import java.util.concurrent.Flow
+import kotlinx.coroutines.flow.Flow
+
 
 @Dao
 interface CourseDAO {
@@ -15,7 +16,7 @@ interface CourseDAO {
     suspend fun deleteCourse(course:String)
 
     @Query("SELECT * FROM course_table WHERE name LIKE :name")
-    fun getCourseByName(name:String):Flow<Course>
+    fun getCourseByName(name:String): Flow<Course>
 
     @Query("SELECT name FROM course_table")
     fun getNames(): Flow<List<String>>

@@ -5,7 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.arquitecturamvvm.CourseApp
+import com.example.arquitecturamvvm.CourseViewModel
+import com.example.arquitecturamvvm.CourseViewModelFactory
+import com.example.arquitecturamvvm.adapters.CourseListAdapter
 import com.example.arquitecturamvvm.databinding.FragmentListBinding
 
 /**
@@ -14,6 +20,14 @@ import com.example.arquitecturamvvm.databinding.FragmentListBinding
 class ListFragment : Fragment() {
 
     private var _binding: FragmentListBinding? = null
+
+    private val courseViewModel: CourseViewModel by viewModels {
+        CourseViewModelFactory((activity?.application as CourseApp).repository)
+    }
+
+    private val courseAdapter : CourseListAdapter by lazy{
+        CourseListAdapter()
+    }
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -31,6 +45,14 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        courseViewModel.courseNames.observe(viewLifecycleOwner) { names ->
+            names.let { courseAdapter.submitList(names.toMutableList()) }
+        }
+
+        binding.RecyclerView.adapter = courseAdapter
+        binding.RecyclerView.layoutManager = LinearLayoutManager(context)
+
 
     }
 

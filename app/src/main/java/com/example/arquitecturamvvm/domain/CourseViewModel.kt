@@ -1,8 +1,17 @@
 package com.example.arquitecturamvvm
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import com.example.arquitecturamvvm.data.CourseRepository
+
+class CourseViewModel(val repository: CourseRepository): ViewModel() {
+    val courseNames: LiveData<List<String>> by lazy {
+        repository.getCourseNames().asLiveData()
+    }
+}
+
 
 class CourseViewModelFactory(private val repository: CourseRepository) :
     ViewModelProvider.Factory {

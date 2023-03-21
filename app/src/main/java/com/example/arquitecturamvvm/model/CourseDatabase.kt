@@ -46,6 +46,13 @@ abstract class CourseDatabase: RoomDatabase() {
                             "Desarrollo de aplicaciones android"
                         )
                     )
+                    INSTANCE!!.courseDao().insertCourse(
+                        Course(
+                            "Informatica Movil2",
+                            "Jose Ramon2",
+                            "Desarrollo de aplicaciones android2"
+                        )
+                    )
                 }
             }
         }
