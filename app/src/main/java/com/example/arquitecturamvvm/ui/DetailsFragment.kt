@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.arquitecturamvvm.CourseApp
@@ -13,50 +14,55 @@ import com.example.arquitecturamvvm.CourseViewModel
 import com.example.arquitecturamvvm.CourseViewModelFactory
 import com.example.arquitecturamvvm.R
 import com.example.arquitecturamvvm.adapters.CourseListAdapter
+import com.example.arquitecturamvvm.databinding.FragmentDetailsBinding
 import com.example.arquitecturamvvm.databinding.FragmentListBinding
-const val ASIGNATURA = "asignatura"
+import com.example.arquitecturamvvm.domain.CourseDetailsViewModel
+import com.example.arquitecturamvvm.domain.CourseDetailsViewModelFactory
+import com.example.arquitecturamvvm.model.Course
+
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class ListFragment : Fragment() {
+class DetailsFragment : Fragment() {
 
-    private var _binding: FragmentListBinding? = null
+    private var _binding: FragmentDetailsBinding? = null
 
-    private val courseViewModel: CourseViewModel by viewModels {
-        CourseViewModelFactory((activity?.application as CourseApp).repository)
+    private val courseDetailsViewModel: CourseDetailsViewModel by viewModels {
+        CourseDetailsViewModelFactory((activity?.application as CourseApp).repository)
     }
 
-    private val adapter = CourseListAdapter { it ->
-        val bundle = Bundle().apply {
-            putString(ASIGNATURA,it)
-        }
-        findNavController().navigate(R.id.action_fromlist_to_details,bundle)
-    }
+    private lateinit var observer : LiveData<Course>
+
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            var asignatura : String? = it.getString("asignatura")
+            courseDetailsViewModel.setCourse(asignatura!!)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentListBinding.inflate(inflater, container, false)
+        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        courseViewModel.courseNames.observe(viewLifecycleOwner) { names ->
-            names.let { adapter.submitList(names.toMutableList()) }
+        courseDetailsViewModel.mCourse.observe(viewLifecycleOwner){
+            binding.tVAsignatura.text = it.name
+            binding.tVProfesor.text = it.teacher
+            binding.tVDetalles.text = it.description
         }
-
-        binding.RecyclerView.adapter = adapter
-        binding.RecyclerView.layoutManager = LinearLayoutManager(context)
-
 
     }
 

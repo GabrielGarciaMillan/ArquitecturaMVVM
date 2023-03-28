@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_fromlist_to_newcourse"
             app:destination="@id/NewCourseFragment" />
+        <action
+            android:id="@+id/action_fromlist_to_details"
+            app:destination="@id/detailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/NewCourseFragment"
@@ -25,4 +28,9 @@
             android:id="@+id/action_fromnewcourse_to_list"
             app:destination="@id/ListFragmnet" />
     </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.arquitecturamvvm.ui.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" />
 </navigation>

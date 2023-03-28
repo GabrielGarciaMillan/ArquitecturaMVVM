@@ -6,11 +6,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.arquitecturamvvm.databinding.ListItemBinding
 import com.example.arquitecturamvvm.model.Course
 
-class CourseViewHolder (val itemBinding: ListItemBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+class CourseViewHolder(val itemBinding: ListItemBinding, private val onItemClicked: (Int) ->Unit) : RecyclerView.ViewHolder(itemBinding.root) {
 
-    fun bind(coursename : String){
+    init {
+        itemView.setOnClickListener {
+            onItemClicked(bindingAdapterPosition)
+        }
+    }
+
+        fun bind(coursename : String){
         itemBinding.tVNombre.text = coursename
     }
+
+
 
 
 

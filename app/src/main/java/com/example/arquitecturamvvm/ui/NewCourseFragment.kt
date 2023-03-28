@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.arquitecturamvvm.CourseApp
 import com.example.arquitecturamvvm.CourseViewModel
 import com.example.arquitecturamvvm.CourseViewModelFactory
+import com.example.arquitecturamvvm.R
 import com.example.arquitecturamvvm.databinding.FragmentListBinding
 import com.example.arquitecturamvvm.databinding.FragmentNewCourseBinding
 import com.example.arquitecturamvvm.model.Course
@@ -51,17 +54,21 @@ class NewCourseFragment : Fragment() {
                 courseViewModel.repository.insertCourse(getData())
             }
             //Navegar a listfragment
+            view.findNavController().navigate(R.id.action_fromnewcourse_to_list)
         }
 
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+
         _binding = null
     }
 
     fun getData() : Course {
-        var course : Course = Course(binding.tInNombre.editText.toString(),binding.tInProfesor.editText.toString(),binding.tInDetalles.editText.toString())
+        var course : Course = Course(binding.tIETNombre.text.toString(),binding.tIETProfesor.text.toString(),binding.tIETDetalles.text.toString())
         return course
     }
+
+
 }
